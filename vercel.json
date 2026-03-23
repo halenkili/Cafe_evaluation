@@ -4,12 +4,32 @@
     {
       "src": "api/index.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "api/analyze.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "*.html",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
-      "src": "/(.*)",
+      "src": "/api/analyze",
+      "dest": "api/analyze.js"
+    },
+    {
+      "src": "/api/(.*)",
       "dest": "api/index.js"
+    },
+    {
+      "src": "/questionnaire",
+      "dest": "/questionnaire.html"
+    },
+    {
+      "src": "/",
+      "dest": "/index.html"
     }
   ]
 }

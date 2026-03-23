@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>咖啡创业风险评估问卷</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    header {
+      background: #333;
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+    }
+    .form-container {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-top: 2rem;
+    }
+    h2 {
+      color: #333;
+      margin-bottom: 1.5rem;
+    }
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+    input[type="text"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    textarea {
+      height: 100px;
+      resize: vertical;
+    }
+    .btn {
+      display: inline-block;
+      background: #4CAF50;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background: #45a049;
+    }
+    .section {
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+    .section:last-child {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>咖啡创业风险评估问卷</h1>
+  </header>
+  
+  <div class="container">
+    <div class="form-container">
+      <form action="/api/analyze" method="POST">
+        <!-- 基本信息 -->
+        <div class="section">
+          <h2>基本信息</h2>
+          <div class="form-group">
+            <label for="name">您的姓名</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="location">计划开店地点</label>
+            <input type="text" id="location" name="location" required>
+          </div>
+          <div class="form-group">
+            <label for="storeSize">店铺面积（平方米）</label>
+            <input type="number" id="storeSize" name="storeSize" min="10" max="500" required>
+          </div>
+          <div class="form-group">
+            <label for="budget">创业预算（万元）</label>
+            <input type="number" id="budget" name="budget" min="10" max="500" required>
+          </div>
+          <div class="form-group">
+            <label for="openingTime">计划开业时间</label>
+            <input type="text" id="openingTime" name="openingTime" placeholder="如：2024年6月" required>
+          </div>
+        </div>
+        
+        <!-- 市场分析 -->
+        <div class="section">
+          <h2>市场分析</h2>
+          <div class="form-group">
+            <label for="marketResearch">您是否进行了市场调研？</label>
+            <select id="marketResearch" name="marketResearch" required>
+              <option value="">请选择</option>
+              <option value="yes">是，详细调研</option>
+              <option value="partial">部分调研</option>
+              <option value="no">否，未调研</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="targetAudience">目标客户群体</label>
+            <textarea id="targetAudience" name="targetAudience" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="competition">周边竞争情况</label>
+            <textarea id="competition" name="competition" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="productPositioning">产品定位</label>
+            <select id="productPositioning" name="productPositioning" required>
+              <option value="">请选择</option>
+              <option value="premium">高端精品咖啡</option>
+              <option value="midRange">中端品质咖啡</option>
+              <option value="budget">平价快捷咖啡</option>
+              <option value="specialty">特色主题咖啡</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="marketTrends">您对当前咖啡市场趋势的了解</label>
+            <textarea id="marketTrends" name="marketTrends" required></textarea>
+          </div>
+        </div>
+        
+        <!-- 运营管理 -->
+        <div class="section">
+          <h2>运营管理</h2>
+          <div class="form-group">
+            <label for="industryExperience">咖啡行业经验</label>
+            <select id="industryExperience" name="industryExperience" required>
+              <option value="">请选择</option>
+              <option value="moreThan5">5年以上</option>
+              <option value="1-5">1-5年</option>
+              <option value="lessThan1">1年以下</option>
+              <option value="none">无</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="coffeeSkills">咖啡制作技术水平</label>
+            <select id="coffeeSkills" name="coffeeSkills" required>
+              <option value="">请选择</option>
+              <option value="expert">专家级（Q-Grader认证）</option>
+              <option value="advanced">高级（专业培训经历）</option>
+              <option value="intermediate">中级（基本制作技能）</option>
+              <option value="beginner">初级（基础了解）</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="equipment">设备配置计划</label>
+            <textarea id="equipment" name="equipment" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="staffing">人员配置计划</label>
+            <textarea id="staffing" name="staffing" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="suppliers">供应商资源</label>
+            <select id="suppliers" name="suppliers" required>
+              <option value="">请选择</option>
+              <option value="secured">已确定</option>
+              <option value="inProgress">正在洽谈</option>
+              <option value="notStarted">尚未开始</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="marketingStrategy">营销策略</label>
+            <textarea id="marketingStrategy" name="marketingStrategy" required></textarea>
+          </div>
+        </div>
+        
+        <!-- 财务规划 -->
+        <div class="section">
+          <h2>财务规划</h2>
+          <div class="form-group">
+            <label for="revenueProjection">月均营收预期（万元）</label>
+            <input type="number" id="revenueProjection" name="revenueProjection" min="1" max="100" required>
+          </div>
+          <div class="form-group">
+            <label for="costStructure">成本结构</label>
+            <textarea id="costStructure" name="costStructure" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="pricingStrategy">定价策略</label>
+            <textarea id="pricingStrategy" name="pricingStrategy" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="breakEven">预计盈亏平衡点（月）</label>
+            <input type="number" id="breakEven" name="breakEven" min="1" max="36" required>
+          </div>
+          <div class="form-group">
+            <label for="cashFlow">现金流规划</label>
+            <textarea id="cashFlow" name="cashFlow" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="fundingSources">资金来源</label>
+            <textarea id="fundingSources" name="fundingSources" required></textarea>
+          </div>
+        </div>
+        
+        <!-- 风险认知 -->
+        <div class="section">
+          <h2>风险认知</h2>
+          <div class="form-group">
+            <label for="mainRisks">您认为主要风险是什么？</label>
+            <textarea id="mainRisks" name="mainRisks" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="riskMitigation">风险应对措施</label>
+            <textarea id="riskMitigation" name="riskMitigation" required></textarea>
+          </div>
+        </div>
+        
+        <button type="submit" class="btn">提交评估</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
