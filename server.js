@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 // 配置Deepseek API
 const deepseekApiKey = process.env.DEEPSEEK_API_KEY || 'sk-05f7787c0a704ad28547a01ef7b3bc2e'; // 已配置API密钥
