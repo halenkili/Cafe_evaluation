@@ -123,7 +123,7 @@ async function getAIAnalysis(formData) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer sk-05f7787c0a704ad28547a01ef7b3bc2e'
+        'Authorization': 'Bearer sk-35cc1904053f48bda11c893bdec0f8a6'
       },
       body: JSON.stringify({
         model: 'deepseek-chat',
