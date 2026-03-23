@@ -12,11 +12,21 @@ app.use(express.static('public'));
 
 // 路由
 app.get('/', (req, res) => {
-  res.render('index');
+  try {
+    res.render('index');
+  } catch (error) {
+    console.error('Error rendering index:', error);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 app.get('/questionnaire', (req, res) => {
-  res.render('questionnaire');
+  try {
+    res.render('questionnaire');
+  } catch (error) {
+    console.error('Error rendering questionnaire:', error);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 app.post('/analyze', (req, res) => {
@@ -41,7 +51,7 @@ app.post('/analyze', (req, res) => {
     };
     res.render('report', { analysis: defaultAnalysis });
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Error analyzing:', error);
     res.status(500).send('Internal Server Error');
   }
 });
