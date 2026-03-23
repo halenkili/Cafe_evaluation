@@ -1,3 +1,15 @@
+// 配置选项
+const CONFIG = {
+  // 分析模式: 'rule-based' (基于规则) 或 'deepseek' (Deepseek API)
+  analysisMode: 'rule-based',
+  // Deepseek API配置 (当analysisMode为'deepseek'时使用)
+  deepseek: {
+    apiKey: 'sk-35cc1904053f48bda11c893bdec0f8a6', // 替换为您的Deepseek API密钥
+    apiUrl: 'https://api.deepseek.com/v1/chat/completions',
+    model: 'deepseek-chat'
+  }
+};
+
 // 处理表单提交并返回分析报告
 module.exports = async (req, res) => {
   try {
@@ -14,7 +26,12 @@ module.exports = async (req, res) => {
       const formDataObject = Object.fromEntries(formData.entries());
       
       // 构建分析请求
-      const analysis = getRuleBasedAnalysis(formDataObject);
+      let analysis;
+      if (CONFIG.analysisMode === 'deepseek') {
+        analysis = await getDeepseekAnalysis(formDataObject);
+      } else {
+        analysis = getRuleBasedAnalysis(formDataObject);
+      }
       
       // 生成HTML报告
       const reportHtml = generateReportHtml(analysis);
@@ -218,6 +235,111 @@ function getRuleBasedAnalysis(formData) {
     recommendations,
     industryInsights
   };
+}
+
+// 调用Deepseek API进行分析
+async function getDeepseekAnalysis(formData) {
+  try {
+    // 构建分析提示
+    const prompt = `你是一位专业的咖啡行业创业顾问，请根据以下用户提交的咖啡创业问卷信息，生成一份详细的风险评估分析报告。
+
+问卷信息：
+姓名: ${formData.name || '未提供'}
+开店地点: ${formData.location || '未提供'}
+店铺面积: ${formData.storeSize || '未提供'}平方米
+创业预算: ${formData.budget || '未提供'}万元
+计划开业时间: ${formData.openingTime || '未提供'}
+
+市场分析：
+市场调研情况: ${formData.marketResearch || '未提供'}
+目标客户群体: ${formData.targetAudience || '未提供'}
+周边竞争情况: ${formData.competition || '未提供'}
+产品定位: ${formData.productPositioning || '未提供'}
+对咖啡市场趋势的了解: ${formData.marketTrends || '未提供'}
+
+运营管理：
+咖啡行业经验: ${formData.industryExperience || '未提供'}
+咖啡制作技术水平: ${formData.coffeeSkills || '未提供'}
+设备配置计划: ${formData.equipment || '未提供'}
+人员配置计划: ${formData.staffing || '未提供'}
+供应商资源: ${formData.suppliers || '未提供'}
+营销策略: ${formData.marketingStrategy || '未提供'}
+
+财务规划：
+月均营收预期: ${formData.revenueProjection || '未提供'}万元
+成本结构: ${formData.costStructure || '未提供'}
+定价策略: ${formData.pricingStrategy || '未提供'}
+预计盈亏平衡点: ${formData.breakEven || '未提供'}个月
+现金流规划: ${formData.cashFlow || '未提供'}
+资金来源: ${formData.fundingSources || '未提供'}
+
+风险认知：
+主要风险: ${formData.mainRisks || '未提供'}
+风险应对措施: ${formData.riskMitigation || '未提供'}
+
+请生成一份详细的分析报告，包括：
+1. 风险评分（0-100）
+2. 优势分析
+3. 劣势分析
+4. 机会分析
+5. 威胁分析
+6. 改进建议
+7. 行业洞察
+
+请使用JSON格式输出，字段如下：
+{
+  "riskScore": 数字,
+  "strengths": ["优势1", "优势2"...],
+  "weaknesses": ["劣势1", "劣势2"...],
+  "opportunities": ["机会1", "机会2"...],
+  "threats": ["威胁1", "威胁2"...],
+  "recommendations": ["建议1", "建议2"...],
+  "industryInsights": ["洞察1", "洞察2"...]
+}`;
+    
+    // 调用Deepseek API
+    const response = await fetch(CONFIG.deepseek.apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${CONFIG.deepseek.apiKey}`
+      },
+      body: JSON.stringify({
+        model: CONFIG.deepseek.model,
+        messages: [
+          {
+            role: 'system',
+            content: '你是一位专业的咖啡行业创业顾问，擅长分析创业风险并提供专业建议。'
+          },
+          {
+            role: 'user',
+            content: prompt
+          }
+        ],
+        temperature: 0.7,
+        max_tokens: 2000
+      })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`API请求失败: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    const analysisContent = data.choices[0].message.content;
+    
+    // 提取JSON内容
+    const jsonMatch = analysisContent.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      return JSON.parse(jsonMatch[0]);
+    } else {
+      throw new Error('无法解析API响应');
+    }
+  } catch (error) {
+    console.error('Deepseek API分析错误:', error);
+    // 出错时返回基于规则的分析结果
+    return getRuleBasedAnalysis(formData);
+  }
 }
 
 // 生成HTML报告
