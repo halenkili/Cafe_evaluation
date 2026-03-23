@@ -358,7 +358,7 @@ function generateReportHtml(analysis) {
         </ul>
       </div>
       
-      <a href="/" class="back-btn">返回首页</a>
+     <a href="/" class="back-btn">返回首页</a>
     </div>
   </div>
 </body>
