@@ -258,14 +258,22 @@ function changeLanguage(lang) {
   if (langInput) {
     langInput.value = lang;
   }
-  updateContent();
   // 重新加载页面以应用所有更改
   location.reload();
 }
 
 // 获取当前语言
 function getCurrentLanguage() {
-  return localStorage.getItem('language') || 'en'; // 默认英文
+  // 首先检查URL中的lang参数
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlLang = urlParams.get('lang');
+  if (urlLang === 'zh' || urlLang === 'en') {
+    // 如果URL中有lang参数，更新localStorage并返回
+    localStorage.setItem('language', urlLang);
+    return urlLang;
+  }
+  // 否则从localStorage获取，默认英文
+  return localStorage.getItem('language') || 'en';
 }
 
 // 更新页面内容
@@ -307,9 +315,9 @@ function updateContent() {
     if (heroButton) {
       heroButton.textContent = translations.index.hero.button;
       if (lang === 'en') {
-        heroButton.href = '/questionnaire?lang=en';
+        heroButton.href = '/questionnaire.html?lang=en';
       } else {
-        heroButton.href = '/questionnaire?lang=zh';
+        heroButton.href = '/questionnaire.html?lang=zh';
       }
     }
     
