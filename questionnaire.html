@@ -112,154 +112,154 @@
         <input type="hidden" id="lang" name="lang" value="en">
         <!-- 基本信息 -->
         <div class="section">
-          <h2>基本信息</h2>
+          <h2>Basic Information</h2>
           <div class="form-group">
-            <label for="name">您的姓名</label>
+            <label for="name">Your Name</label>
             <input type="text" id="name" name="name" required>
           </div>
           <div class="form-group">
-            <label for="location">计划开店地点</label>
+            <label for="location">Planned Store Location</label>
             <input type="text" id="location" name="location" required>
           </div>
           <div class="form-group">
-            <label for="storeSize">店铺面积（平方米）</label>
+            <label for="storeSize">Store Area (square meters)</label>
             <input type="number" id="storeSize" name="storeSize" min="10" max="500" required>
           </div>
           <div class="form-group">
-            <label for="budget">创业预算（万元）</label>
+            <label for="budget">Startup Budget (10,000 yuan)</label>
             <input type="number" id="budget" name="budget" min="10" max="500" required>
           </div>
           <div class="form-group">
-            <label for="openingTime">计划开业时间</label>
-            <input type="text" id="openingTime" name="openingTime" placeholder="如：2024年6月" required>
+            <label for="openingTime">Planned Opening Time</label>
+            <input type="text" id="openingTime" name="openingTime" placeholder="e.g., June 2024" required>
           </div>
         </div>
         
         <!-- 市场分析 -->
         <div class="section">
-          <h2>市场分析</h2>
+          <h2>Market Analysis</h2>
           <div class="form-group">
-            <label for="marketResearch">您是否进行了市场调研？</label>
+            <label for="marketResearch">Have you conducted market research?</label>
             <select id="marketResearch" name="marketResearch" required>
-              <option value="">请选择</option>
-              <option value="yes">是，详细调研</option>
-              <option value="partial">部分调研</option>
-              <option value="no">否，未调研</option>
+              <option value="">Please select</option>
+              <option value="yes">Yes, detailed research</option>
+              <option value="partial">Partial research</option>
+              <option value="no">No, no research</option>
             </select>
           </div>
           <div class="form-group">
-            <label for="targetAudience">目标客户群体</label>
+            <label for="targetAudience">Target Customer Group</label>
             <textarea id="targetAudience" name="targetAudience" required></textarea>
           </div>
           <div class="form-group">
-            <label for="competition">周边竞争情况</label>
+            <label for="competition">Surrounding Competition</label>
             <textarea id="competition" name="competition" required></textarea>
           </div>
           <div class="form-group">
-            <label for="productPositioning">产品定位</label>
+            <label for="productPositioning">Product Positioning</label>
             <select id="productPositioning" name="productPositioning" required>
-              <option value="">请选择</option>
-              <option value="premium">高端精品咖啡</option>
-              <option value="midRange">中端品质咖啡</option>
-              <option value="budget">平价快捷咖啡</option>
-              <option value="specialty">特色主题咖啡</option>
+              <option value="">Please select</option>
+              <option value="premium">High-end specialty coffee</option>
+              <option value="midRange">Mid-range quality coffee</option>
+              <option value="budget">Affordable quick coffee</option>
+              <option value="specialty">Themed specialty coffee</option>
             </select>
           </div>
           <div class="form-group">
-            <label for="marketTrends">您对当前咖啡市场趋势的了解</label>
+            <label for="marketTrends">Your understanding of current coffee market trends</label>
             <textarea id="marketTrends" name="marketTrends" required></textarea>
           </div>
         </div>
         
         <!-- 运营管理 -->
         <div class="section">
-          <h2>运营管理</h2>
+          <h2>Operation Management</h2>
           <div class="form-group">
-            <label for="industryExperience">咖啡行业经验</label>
+            <label for="industryExperience">Coffee industry experience</label>
             <select id="industryExperience" name="industryExperience" required>
-              <option value="">请选择</option>
-              <option value="moreThan5">5年以上</option>
-              <option value="1-5">1-5年</option>
-              <option value="lessThan1">1年以下</option>
-              <option value="none">无</option>
+              <option value="">Please select</option>
+              <option value="moreThan5">More than 5 years</option>
+              <option value="1-5">1-5 years</option>
+              <option value="lessThan1">Less than 1 year</option>
+              <option value="none">None</option>
             </select>
           </div>
           <div class="form-group">
-            <label for="coffeeSkills">咖啡制作技术水平</label>
+            <label for="coffeeSkills">Coffee making skill level</label>
             <select id="coffeeSkills" name="coffeeSkills" required>
-              <option value="">请选择</option>
-              <option value="expert">专家级（Q-Grader认证）</option>
-              <option value="advanced">高级（专业培训经历）</option>
-              <option value="intermediate">中级（基本制作技能）</option>
-              <option value="beginner">初级（基础了解）</option>
+              <option value="">Please select</option>
+              <option value="expert">Expert level (Q-Grader certified)</option>
+              <option value="advanced">Advanced (professional training)</option>
+              <option value="intermediate">Intermediate (basic skills)</option>
+              <option value="beginner">Beginner (basic understanding)</option>
             </select>
           </div>
           <div class="form-group">
-            <label for="equipment">设备配置计划</label>
+            <label for="equipment">Equipment configuration plan</label>
             <textarea id="equipment" name="equipment" required></textarea>
           </div>
           <div class="form-group">
-            <label for="staffing">人员配置计划</label>
+            <label for="staffing">Staffing plan</label>
             <textarea id="staffing" name="staffing" required></textarea>
           </div>
           <div class="form-group">
-            <label for="suppliers">供应商资源</label>
+            <label for="suppliers">Supplier resources</label>
             <select id="suppliers" name="suppliers" required>
-              <option value="">请选择</option>
-              <option value="secured">已确定</option>
-              <option value="inProgress">正在洽谈</option>
-              <option value="notStarted">尚未开始</option>
+              <option value="">Please select</option>
+              <option value="secured">Confirmed</option>
+              <option value="inProgress">In negotiation</option>
+              <option value="notStarted">Not started yet</option>
             </select>
           </div>
           <div class="form-group">
-            <label for="marketingStrategy">营销策略</label>
+            <label for="marketingStrategy">Marketing strategy</label>
             <textarea id="marketingStrategy" name="marketingStrategy" required></textarea>
           </div>
         </div>
         
         <!-- 财务规划 -->
         <div class="section">
-          <h2>财务规划</h2>
+          <h2>Financial Planning</h2>
           <div class="form-group">
-            <label for="revenueProjection">月均营收预期（万元）</label>
+            <label for="revenueProjection">Monthly revenue expectation (10,000 yuan)</label>
             <input type="number" id="revenueProjection" name="revenueProjection" min="1" max="100" required>
           </div>
           <div class="form-group">
-            <label for="costStructure">成本结构</label>
+            <label for="costStructure">Cost structure</label>
             <textarea id="costStructure" name="costStructure" required></textarea>
           </div>
           <div class="form-group">
-            <label for="pricingStrategy">定价策略</label>
+            <label for="pricingStrategy">Pricing strategy</label>
             <textarea id="pricingStrategy" name="pricingStrategy" required></textarea>
           </div>
           <div class="form-group">
-            <label for="breakEven">预计盈亏平衡点（月）</label>
+            <label for="breakEven">Expected break-even point (months)</label>
             <input type="number" id="breakEven" name="breakEven" min="1" max="36" required>
           </div>
           <div class="form-group">
-            <label for="cashFlow">现金流规划</label>
+            <label for="cashFlow">Cash flow planning</label>
             <textarea id="cashFlow" name="cashFlow" required></textarea>
           </div>
           <div class="form-group">
-            <label for="fundingSources">资金来源</label>
+            <label for="fundingSources">Funding sources</label>
             <textarea id="fundingSources" name="fundingSources" required></textarea>
           </div>
         </div>
         
         <!-- 风险认知 -->
         <div class="section">
-          <h2>风险认知</h2>
+          <h2>Risk Awareness</h2>
           <div class="form-group">
-            <label for="mainRisks">您认为主要风险是什么？</label>
+            <label for="mainRisks">What do you think are the main risks?</label>
             <textarea id="mainRisks" name="mainRisks" required></textarea>
           </div>
           <div class="form-group">
-            <label for="riskMitigation">风险应对措施</label>
+            <label for="riskMitigation">Risk response measures</label>
             <textarea id="riskMitigation" name="riskMitigation" required></textarea>
           </div>
         </div>
         
-        <button type="submit" class="btn">提交评估</button>
+        <button type="submit" class="btn">Submit Assessment</button>
       </form>
     </div>
   </div>

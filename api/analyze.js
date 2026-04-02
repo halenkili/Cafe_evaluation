@@ -37,7 +37,7 @@ module.exports = async (req, res) => {
       if (CONFIG.analysisMode === 'deepseek') {
         analysis = await getDeepseekAnalysis(formDataObject);
       } else {
-        analysis = getRuleBasedAnalysis(formDataObject);
+        analysis = getRuleBasedAnalysis(formDataObject, lang);
       }
       
       // 生成HTML报告
@@ -51,7 +51,7 @@ module.exports = async (req, res) => {
   } catch (error) {
     console.error('Error processing analyze request:', error);
     // 出错时返回默认分析结果
-    const defaultAnalysis = {
+    const defaultAnalysis = lang === 'zh' ? {
       riskScore: 50,
       strengths: ['有创业热情', '有一定的预算规划', '对咖啡行业有基本了解'],
       weaknesses: ['需要更多行业经验', '市场调研不足', '可能缺乏专业的运营管理知识'],
@@ -73,154 +73,187 @@ module.exports = async (req, res) => {
         '数字化营销和会员体系可以有效提升客户忠诚度',
         '可持续发展和环保理念正成为行业趋势，可考虑融入品牌价值'
       ]
+    } : {
+      riskScore: 50,
+      strengths: ['Has entrepreneurial enthusiasm', 'Has certain budget planning', 'Has basic understanding of coffee industry'],
+      weaknesses: ['Needs more industry experience', 'Insufficient market research', 'May lack professional operation and management knowledge'],
+      opportunities: ['Coffee market has great potential', 'Consumer demand for quality coffee is growing', 'Specialty coffee experience has development space'],
+      threats: ['Intense market competition', 'Cost increase pressure', 'Consumer preferences change quickly'],
+      recommendations: [
+        'It is recommended to conduct more detailed market research to understand target customer needs and competitive situation',
+        'Consider hiring experienced coffee industry consultants for professional guidance',
+        'Develop detailed operation plan and marketing strategy to clarify brand positioning',
+        'Establish stable supplier relationships to ensure raw material quality and supply stability',
+        'Strengthen employee training to improve service quality and product consistency',
+        'Develop reasonable pricing strategy to balance profit and market competitiveness',
+        'Establish emergency fund reserve to应对 possible business risks'
+      ],
+      industryInsights: [
+        'The coffee industry focuses on product quality and customer experience; it is recommended to focus on these two aspects',
+        'Location is crucial for coffee shop success; it is recommended to conduct detailed location analysis',
+        'Employee training and retention are key factors for long-term success',
+        'Digital marketing and membership systems can effectively improve customer loyalty',
+        'Sustainable development and environmental protection concepts are becoming industry trends; consider integrating them into brand value'
+      ]
     };
-    const reportHtml = generateReportHtml(defaultAnalysis, 'en');
+    const reportHtml = generateReportHtml(defaultAnalysis, lang);
     res.setHeader('Content-Type', 'text/html');
     res.status(200).send(reportHtml);
   }
 };
 
 // 基于规则的分析引擎
-function getRuleBasedAnalysis(formData) {
+function getRuleBasedAnalysis(formData, lang = 'en') {
   let riskScore = 50;
   const strengths = [];
   const weaknesses = [];
   const opportunities = [];
   const threats = [];
   const recommendations = [];
-  const industryInsights = [
+  const industryInsights = lang === 'zh' ? [
     '咖啡行业注重产品品质和顾客体验，建议在这两方面下功夫',
     '选址对咖啡店成功至关重要，建议进行详细的区位分析',
     '员工培训和 retention 是长期成功的关键因素',
     '数字化营销和会员体系可以有效提升客户忠诚度',
     '可持续发展和环保理念正成为行业趋势，可考虑融入品牌价值'
+  ] : [
+    'The coffee industry focuses on product quality and customer experience; it is recommended to focus on these two aspects',
+    'Location is crucial for coffee shop success; it is recommended to conduct detailed location analysis',
+    'Employee training and retention are key factors for long-term success',
+    'Digital marketing and membership systems can effectively improve customer loyalty',
+    'Sustainable development and environmental protection concepts are becoming industry trends; consider integrating them into brand value'
   ];
   
   // 分析市场调研情况
   if (formData.marketResearch === 'yes') {
-    strengths.push('进行了详细的市场调研');
+    strengths.push(lang === 'zh' ? '进行了详细的市场调研' : 'Conducted detailed market research');
     riskScore -= 10;
   } else if (formData.marketResearch === 'partial') {
-    strengths.push('进行了部分市场调研');
-    weaknesses.push('市场调研不够全面');
+    strengths.push(lang === 'zh' ? '进行了部分市场调研' : 'Conducted partial market research');
+    weaknesses.push(lang === 'zh' ? '市场调研不够全面' : 'Market research is not comprehensive enough');
   } else {
-    weaknesses.push('缺乏市场调研');
+    weaknesses.push(lang === 'zh' ? '缺乏市场调研' : 'Lacks market research');
     riskScore += 15;
-    recommendations.push('建议进行详细的市场调研，了解目标客户需求和竞争情况');
+    recommendations.push(lang === 'zh' ? '建议进行详细的市场调研，了解目标客户需求和竞争情况' : 'It is recommended to conduct detailed market research to understand target customer needs and competitive situation');
   }
   
   // 分析行业经验
   if (formData.industryExperience === 'moreThan5') {
-    strengths.push('拥有5年以上咖啡行业经验');
+    strengths.push(lang === 'zh' ? '拥有5年以上咖啡行业经验' : 'Has more than 5 years of coffee industry experience');
     riskScore -= 15;
   } else if (formData.industryExperience === '1-5') {
-    strengths.push('拥有1-5年咖啡行业经验');
+    strengths.push(lang === 'zh' ? '拥有1-5年咖啡行业经验' : 'Has 1-5 years of coffee industry experience');
   } else if (formData.industryExperience === 'lessThan1') {
-    weaknesses.push('咖啡行业经验不足1年');
+    weaknesses.push(lang === 'zh' ? '咖啡行业经验不足1年' : 'Less than 1 year of coffee industry experience');
     riskScore += 10;
   } else {
-    weaknesses.push('缺乏咖啡行业经验');
+    weaknesses.push(lang === 'zh' ? '缺乏咖啡行业经验' : 'Lacks coffee industry experience');
     riskScore += 20;
-    recommendations.push('考虑聘请有经验的咖啡行业顾问，获取专业指导');
+    recommendations.push(lang === 'zh' ? '考虑聘请有经验的咖啡行业顾问，获取专业指导' : 'Consider hiring experienced coffee industry consultants for professional guidance');
   }
   
   // 分析咖啡制作技术水平
   if (formData.coffeeSkills === 'expert' || formData.coffeeSkills === 'advanced') {
-    strengths.push('咖啡制作技术水平较高');
+    strengths.push(lang === 'zh' ? '咖啡制作技术水平较高' : 'Has high coffee making skill level');
     riskScore -= 5;
   } else {
-    weaknesses.push('咖啡制作技术水平需要提升');
-    recommendations.push('加强咖啡制作技术培训，提升产品品质');
+    weaknesses.push(lang === 'zh' ? '咖啡制作技术水平需要提升' : 'Coffee making skill level needs improvement');
+    recommendations.push(lang === 'zh' ? '加强咖啡制作技术培训，提升产品品质' : 'Strengthen coffee making technical training to improve product quality');
   }
   
   // 分析供应商资源
   if (formData.suppliers === 'secured') {
-    strengths.push('已确定供应商资源');
+    strengths.push(lang === 'zh' ? '已确定供应商资源' : 'Supplier resources confirmed');
     riskScore -= 5;
   } else if (formData.suppliers === 'inProgress') {
-    strengths.push('正在洽谈供应商');
+    strengths.push(lang === 'zh' ? '正在洽谈供应商' : 'Negotiating with suppliers');
   } else {
-    weaknesses.push('尚未开始寻找供应商');
+    weaknesses.push(lang === 'zh' ? '尚未开始寻找供应商' : 'Has not started looking for suppliers');
     riskScore += 10;
-    recommendations.push('建立稳定的供应商关系，确保原材料质量和供应稳定性');
+    recommendations.push(lang === 'zh' ? '建立稳定的供应商关系，确保原材料质量和供应稳定性' : 'Establish stable supplier relationships to ensure raw material quality and supply stability');
   }
   
   // 分析预算情况
   const budget = parseInt(formData.budget) || 0;
   if (budget >= 50) {
-    strengths.push('创业预算充足');
+    strengths.push(lang === 'zh' ? '创业预算充足' : 'Sufficient startup budget');
     riskScore -= 10;
   } else if (budget >= 20) {
-    strengths.push('创业预算基本合理');
+    strengths.push(lang === 'zh' ? '创业预算基本合理' : 'Startup budget is basically reasonable');
   } else {
-    weaknesses.push('创业预算可能不足');
+    weaknesses.push(lang === 'zh' ? '创业预算可能不足' : 'Startup budget may be insufficient');
     riskScore += 15;
-    recommendations.push('重新评估预算，确保有足够的资金支持初期运营');
+    recommendations.push(lang === 'zh' ? '重新评估预算，确保有足够的资金支持初期运营' : 'Re-evaluate the budget to ensure sufficient funds to support initial operations');
   }
   
   // 分析盈亏平衡点
   const breakEven = parseInt(formData.breakEven) || 0;
   if (breakEven <= 6) {
-    strengths.push('预计盈亏平衡点合理');
+    strengths.push(lang === 'zh' ? '预计盈亏平衡点合理' : 'Expected break-even point is reasonable');
     riskScore -= 5;
   } else if (breakEven <= 12) {
-    strengths.push('预计盈亏平衡点在可接受范围内');
+    strengths.push(lang === 'zh' ? '预计盈亏平衡点在可接受范围内' : 'Expected break-even point is within acceptable range');
   } else {
-    weaknesses.push('预计盈亏平衡点过长');
+    weaknesses.push(lang === 'zh' ? '预计盈亏平衡点过长' : 'Expected break-even point is too long');
     riskScore += 10;
-    recommendations.push('优化成本结构，缩短盈亏平衡时间');
+    recommendations.push(lang === 'zh' ? '优化成本结构，缩短盈亏平衡时间' : 'Optimize cost structure to shorten break-even time');
   }
   
   // 分析产品定位
   if (formData.productPositioning) {
-    strengths.push('有明确的产品定位');
+    strengths.push(lang === 'zh' ? '有明确的产品定位' : 'Has clear product positioning');
     riskScore -= 5;
   } else {
-    weaknesses.push('产品定位不明确');
+    weaknesses.push(lang === 'zh' ? '产品定位不明确' : 'Product positioning is not clear');
     riskScore += 10;
-    recommendations.push('明确产品定位，制定差异化竞争策略');
+    recommendations.push(lang === 'zh' ? '明确产品定位，制定差异化竞争策略' : 'Clarify product positioning and develop differentiated competition strategy');
   }
   
   // 分析营销策略
   if (formData.marketingStrategy && formData.marketingStrategy.length > 50) {
-    strengths.push('有详细的营销策略');
+    strengths.push(lang === 'zh' ? '有详细的营销策略' : 'Has detailed marketing strategy');
     riskScore -= 5;
   } else {
-    weaknesses.push('营销策略不够详细');
-    recommendations.push('制定详细的营销策略，提升品牌知名度');
+    weaknesses.push(lang === 'zh' ? '营销策略不够详细' : 'Marketing strategy is not detailed enough');
+    recommendations.push(lang === 'zh' ? '制定详细的营销策略，提升品牌知名度' : 'Develop detailed marketing strategy to enhance brand awareness');
   }
   
   // 分析现金流规划
   if (formData.cashFlow && formData.cashFlow.length > 50) {
-    strengths.push('有详细的现金流规划');
+    strengths.push(lang === 'zh' ? '有详细的现金流规划' : 'Has detailed cash flow planning');
     riskScore -= 5;
   } else {
-    weaknesses.push('现金流规划不够详细');
+    weaknesses.push(lang === 'zh' ? '现金流规划不够详细' : 'Cash flow planning is not detailed enough');
     riskScore += 10;
-    recommendations.push('制定详细的现金流规划，确保资金链稳定');
+    recommendations.push(lang === 'zh' ? '制定详细的现金流规划，确保资金链稳定' : 'Develop detailed cash flow planning to ensure stable capital chain');
   }
   
   // 添加通用机会和威胁
-  opportunities.push('咖啡市场潜力大');
-  opportunities.push('消费者对品质咖啡的需求增长');
-  opportunities.push('特色咖啡体验有发展空间');
+  opportunities.push(lang === 'zh' ? '咖啡市场潜力大' : 'Coffee market has great potential');
+  opportunities.push(lang === 'zh' ? '消费者对品质咖啡的需求增长' : 'Consumer demand for quality coffee is growing');
+  opportunities.push(lang === 'zh' ? '特色咖啡体验有发展空间' : 'Specialty coffee experience has development space');
   
-  threats.push('市场竞争激烈');
-  threats.push('成本上升压力');
-  threats.push('消费者偏好变化快');
+  threats.push(lang === 'zh' ? '市场竞争激烈' : 'Intense market competition');
+  threats.push(lang === 'zh' ? '成本上升压力' : 'Cost increase pressure');
+  threats.push(lang === 'zh' ? '消费者偏好变化快' : 'Consumer preferences change quickly');
   
   // 添加通用建议
-  if (!recommendations.includes('制定详细的运营计划和营销策略，明确品牌定位')) {
-    recommendations.push('制定详细的运营计划和营销策略，明确品牌定位');
+  const recommend1 = lang === 'zh' ? '制定详细的运营计划和营销策略，明确品牌定位' : 'Develop detailed operation plan and marketing strategy to clarify brand positioning';
+  const recommend2 = lang === 'zh' ? '加强员工培训，提升服务质量和产品一致性' : 'Strengthen employee training to improve service quality and product consistency';
+  const recommend3 = lang === 'zh' ? '制定合理的价格策略，平衡利润和市场竞争力' : 'Develop reasonable pricing strategy to balance profit and market competitiveness';
+  const recommend4 = lang === 'zh' ? '建立应急资金储备，应对可能的经营风险' : 'Establish emergency fund reserve to应对 possible business risks';
+  
+  if (!recommendations.includes(recommend1)) {
+    recommendations.push(recommend1);
   }
-  if (!recommendations.includes('加强员工培训，提升服务质量和产品一致性')) {
-    recommendations.push('加强员工培训，提升服务质量和产品一致性');
+  if (!recommendations.includes(recommend2)) {
+    recommendations.push(recommend2);
   }
-  if (!recommendations.includes('制定合理的价格策略，平衡利润和市场竞争力')) {
-    recommendations.push('制定合理的价格策略，平衡利润和市场竞争力');
+  if (!recommendations.includes(recommend3)) {
+    recommendations.push(recommend3);
   }
-  if (!recommendations.includes('建立应急资金储备，应对可能的经营风险')) {
-    recommendations.push('建立应急资金储备，应对可能的经营风险');
+  if (!recommendations.includes(recommend4)) {
+    recommendations.push(recommend4);
   }
   
   // 确保风险评分在0-100之间
@@ -228,9 +261,9 @@ function getRuleBasedAnalysis(formData) {
   
   // 如果没有优势，添加默认优势
   if (strengths.length === 0) {
-    strengths.push('有创业热情');
-    strengths.push('有一定的预算规划');
-    strengths.push('对咖啡行业有基本了解');
+    strengths.push(lang === 'zh' ? '有创业热情' : 'Has entrepreneurial enthusiasm');
+    strengths.push(lang === 'zh' ? '有一定的预算规划' : 'Has certain budget planning');
+    strengths.push(lang === 'zh' ? '对咖啡行业有基本了解' : 'Has basic understanding of coffee industry');
   }
   
   return {

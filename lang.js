@@ -315,7 +315,7 @@ function updateContent() {
     
     // 更新服务部分
     const servicesTitle = document.querySelector('.container h2');
-    if (servicesTitle && servicesTitle.textContent.includes('我们的服务')) {
+    if (servicesTitle) {
       servicesTitle.textContent = translations.index.services.title;
     }
     
