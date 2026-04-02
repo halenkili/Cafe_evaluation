@@ -1,3 +1,61 @@
+// 语言配置
+const LANG = {
+  zh: {
+    nav: {
+      home: '首页',
+      questionnaire: '问卷',
+      language: 'English'
+    },
+    report: {
+      title: '咖啡创业风险评估报告',
+      sections: {
+        score: '风险评分',
+        strengths: '优势分析',
+        weaknesses: '劣势分析',
+        opportunities: '机会分析',
+        threats: '威胁分析',
+        recommendations: '改进建议',
+        insights: '行业洞察'
+      },
+      riskLevels: {
+        high: '高风险水平',
+        mediumHigh: '中等偏高风险水平',
+        medium: '中等风险水平',
+        mediumLow: '中等偏低风险水平',
+        low: '低风险水平'
+      },
+      back: '返回首页'
+    }
+  },
+  en: {
+    nav: {
+      home: 'Home',
+      questionnaire: 'Questionnaire',
+      language: '中文'
+    },
+    report: {
+      title: 'Coffee Shop Business Risk Assessment Report',
+      sections: {
+        score: 'Risk Score',
+        strengths: 'Strengths Analysis',
+        weaknesses: 'Weaknesses Analysis',
+        opportunities: 'Opportunities Analysis',
+        threats: 'Threats Analysis',
+        recommendations: 'Improvement Suggestions',
+        insights: 'Industry Insights'
+      },
+      riskLevels: {
+        high: 'High Risk Level',
+        mediumHigh: 'Medium-High Risk Level',
+        medium: 'Medium Risk Level',
+        mediumLow: 'Medium-Low Risk Level',
+        low: 'Low Risk Level'
+      },
+      back: 'Back to Home'
+    }
+  }
+};
+
 // 配置选项
 const CONFIG = {
   // 分析模式: 'rule-based' (基于规则) 或 'deepseek' (Deepseek API)
@@ -611,7 +669,7 @@ function generateReportHtml(analysis, lang = 'en') {
         </ul>
       </div>
       
-      <a href="/index.html" class="back-btn">${translations.report.back}</a>
+      <a href="${lang === 'en' ? '/index.html' : '/index-zh.html'}" class="back-btn">${translations.report.back}</a>
     </div>
   </div>
 </body>
