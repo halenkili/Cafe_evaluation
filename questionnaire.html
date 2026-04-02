@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>咖啡创业风险评估问卷</title>
+  <title>Coffee Shop Business Risk Assessment Questionnaire</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -22,6 +22,24 @@
       color: #fff;
       padding: 1rem;
       text-align: center;
+      position: relative;
+    }
+    .lang-switcher {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+    }
+    .lang-button {
+      background: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .lang-button:hover {
+      background: #45a049;
     }
     .form-container {
       background: #fff;
@@ -78,15 +96,20 @@
       border-bottom: none;
     }
   </style>
+  <script src="lang.js"></script>
 </head>
 <body>
   <header>
-    <h1>咖啡创业风险评估问卷</h1>
+    <div class="lang-switcher">
+      <button id="lang-button" class="lang-button">中文</button>
+    </div>
+    <h1>Coffee Shop Business Risk Assessment Questionnaire</h1>
   </header>
   
   <div class="container">
     <div class="form-container">
       <form action="/api/analyze" method="POST">
+        <input type="hidden" id="lang" name="lang" value="en">
         <!-- 基本信息 -->
         <div class="section">
           <h2>基本信息</h2>

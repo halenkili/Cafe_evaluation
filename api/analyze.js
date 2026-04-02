@@ -25,6 +25,13 @@ module.exports = async (req, res) => {
       const formData = new URLSearchParams(body);
       const formDataObject = Object.fromEntries(formData.entries());
       
+      // 获取语言参数
+      let lang = 'en'; // 默认英文
+      const langParam = formData.get('lang');
+      if (langParam === 'zh') {
+        lang = 'zh';
+      }
+      
       // 构建分析请求
       let analysis;
       if (CONFIG.analysisMode === 'deepseek') {
@@ -34,7 +41,7 @@ module.exports = async (req, res) => {
       }
       
       // 生成HTML报告
-      const reportHtml = generateReportHtml(analysis);
+      const reportHtml = generateReportHtml(analysis, lang);
       
       res.setHeader('Content-Type', 'text/html');
       res.status(200).send(reportHtml);
@@ -67,7 +74,7 @@ module.exports = async (req, res) => {
         '可持续发展和环保理念正成为行业趋势，可考虑融入品牌价值'
       ]
     };
-    const reportHtml = generateReportHtml(defaultAnalysis);
+    const reportHtml = generateReportHtml(defaultAnalysis, 'en');
     res.setHeader('Content-Type', 'text/html');
     res.status(200).send(reportHtml);
   }
@@ -342,15 +349,84 @@ async function getDeepseekAnalysis(formData) {
   }
 }
 
+// 语言配置
+const LANG = {
+  zh: {
+    nav: {
+      home: '首页',
+      questionnaire: '问卷',
+      language: 'English'
+    },
+    report: {
+      title: '咖啡创业风险评估报告',
+      sections: {
+        score: '风险评分',
+        strengths: '优势分析',
+        weaknesses: '劣势分析',
+        opportunities: '机会分析',
+        threats: '威胁分析',
+        recommendations: '改进建议',
+        insights: '行业洞察'
+      },
+      riskLevels: {
+        high: '高风险水平',
+        mediumHigh: '中等偏高风险水平',
+        medium: '中等风险水平',
+        mediumLow: '中等偏低风险水平',
+        low: '低风险水平'
+      },
+      back: '返回首页'
+    }
+  },
+  en: {
+    nav: {
+      home: 'Home',
+      questionnaire: 'Questionnaire',
+      language: '中文'
+    },
+    report: {
+      title: 'Coffee Shop Business Risk Assessment Report',
+      sections: {
+        score: 'Risk Score',
+        strengths: 'Strengths Analysis',
+        weaknesses: 'Weaknesses Analysis',
+        opportunities: 'Opportunities Analysis',
+        threats: 'Threats Analysis',
+        recommendations: 'Improvement Suggestions',
+        insights: 'Industry Insights'
+      },
+      riskLevels: {
+        high: 'High Risk Level',
+        mediumHigh: 'Medium-High Risk Level',
+        medium: 'Medium Risk Level',
+        mediumLow: 'Medium-Low Risk Level',
+        low: 'Low Risk Level'
+      },
+      back: 'Back to Home'
+    }
+  }
+};
+
+// 获取风险等级描述
+function getRiskLevel(score, lang = 'en') {
+  const translations = LANG[lang];
+  if (score >= 80) return translations.report.riskLevels.high;
+  if (score >= 60) return translations.report.riskLevels.mediumHigh;
+  if (score >= 40) return translations.report.riskLevels.medium;
+  if (score >= 20) return translations.report.riskLevels.mediumLow;
+  return translations.report.riskLevels.low;
+}
+
 // 生成HTML报告
-function generateReportHtml(analysis) {
+function generateReportHtml(analysis, lang = 'en') {
+  const translations = LANG[lang];
   return `
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="${lang === 'zh' ? 'zh-CN' : 'en'}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>咖啡创业风险评估报告</title>
+  <title>${translations.report.title}</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -369,6 +445,24 @@ function generateReportHtml(analysis) {
       color: #fff;
       padding: 1rem;
       text-align: center;
+      position: relative;
+    }
+    .lang-switcher {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+    }
+    .lang-button {
+      background: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .lang-button:hover {
+      background: #45a049;
     }
     .report-container {
       background: #fff;
@@ -424,63 +518,67 @@ function generateReportHtml(analysis) {
       background: #555;
     }
   </style>
+  <script src="lang.js"></script>
 </head>
 <body>
   <header>
-    <h1>咖啡创业风险评估报告</h1>
+    <div class="lang-switcher">
+      <button id="lang-button" class="lang-button">${translations.nav.language}</button>
+    </div>
+    <h1>${translations.report.title}</h1>
   </header>
   
   <div class="container">
     <div class="report-container">
       <div class="score-card">
-        <h2>风险评分</h2>
+        <h2>${translations.report.sections.score}</h2>
         <div class="score">${analysis.riskScore}</div>
-        <p>${getRiskLevel(analysis.riskScore)}</p>
+        <p>${getRiskLevel(analysis.riskScore, lang)}</p>
       </div>
       
       <div class="section">
-        <h2>优势分析</h2>
+        <h2>${translations.report.sections.strengths}</h2>
         <ul>
           ${analysis.strengths.map(item => `<li>${item}</li>`).join('')}
         </ul>
       </div>
       
       <div class="section">
-        <h2>劣势分析</h2>
+        <h2>${translations.report.sections.weaknesses}</h2>
         <ul>
           ${analysis.weaknesses.map(item => `<li>${item}</li>`).join('')}
         </ul>
       </div>
       
       <div class="section">
-        <h2>机会分析</h2>
+        <h2>${translations.report.sections.opportunities}</h2>
         <ul>
           ${analysis.opportunities.map(item => `<li>${item}</li>`).join('')}
         </ul>
       </div>
       
       <div class="section">
-        <h2>威胁分析</h2>
+        <h2>${translations.report.sections.threats}</h2>
         <ul>
           ${analysis.threats.map(item => `<li>${item}</li>`).join('')}
         </ul>
       </div>
       
       <div class="section">
-        <h2>改进建议</h2>
+        <h2>${translations.report.sections.recommendations}</h2>
         <ul>
           ${analysis.recommendations.map(item => `<li>${item}</li>`).join('')}
         </ul>
       </div>
       
       <div class="section">
-        <h2>行业洞察</h2>
+        <h2>${translations.report.sections.insights}</h2>
         <ul>
           ${analysis.industryInsights.map(item => `<li>${item}</li>`).join('')}
         </ul>
       </div>
       
-     <a href="/index.html" class="back-btn">返回首页</a>
+      <a href="/index.html" class="back-btn">${translations.report.back}</a>
     </div>
   </div>
 </body>
@@ -488,11 +586,4 @@ function generateReportHtml(analysis) {
   `;
 }
 
-// 获取风险等级描述
-function getRiskLevel(score) {
-  if (score >= 80) return '高风险水平';
-  if (score >= 60) return '中等偏高风险水平';
-  if (score >= 40) return '中等风险水平';
-  if (score >= 20) return '中等偏低风险水平';
-  return '低风险水平';
-}
+
