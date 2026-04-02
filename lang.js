@@ -252,6 +252,7 @@ const LANG = {
 
 // 语言切换功能
 function changeLanguage(lang) {
+  console.log('Changing language to:', lang);
   localStorage.setItem('language', lang);
   // 更新隐藏的语言字段
   const langInput = document.getElementById('lang');
@@ -264,27 +265,40 @@ function changeLanguage(lang) {
 
 // 获取当前语言
 function getCurrentLanguage() {
+  console.log('Getting current language...');
   // 首先检查URL中的lang参数
   const urlParams = new URLSearchParams(window.location.search);
   const urlLang = urlParams.get('lang');
+  console.log('URL lang parameter:', urlLang);
   if (urlLang === 'zh' || urlLang === 'en') {
     // 如果URL中有lang参数，更新localStorage并返回
     localStorage.setItem('language', urlLang);
+    console.log('Using language from URL:', urlLang);
     return urlLang;
   }
   // 否则从localStorage获取，默认英文
-  return localStorage.getItem('language') || 'en';
+  const storedLang = localStorage.getItem('language');
+  console.log('Stored language:', storedLang);
+  const finalLang = storedLang || 'en';
+  console.log('Final language:', finalLang);
+  return finalLang;
 }
 
 // 更新页面内容
 function updateContent() {
+  console.log('Updating content...');
   const lang = getCurrentLanguage();
+  console.log('Current language:', lang);
   const translations = LANG[lang];
+  console.log('Translations:', translations);
   
   // 更新语言切换按钮
   const langButton = document.getElementById('lang-button');
   if (langButton) {
     langButton.textContent = translations.nav.language;
+    // 移除现有的事件监听器，避免重复绑定
+    langButton.onclick = null;
+    // 确保事件监听器被正确绑定
     langButton.onclick = () => changeLanguage(lang === 'zh' ? 'en' : 'zh');
   }
   
