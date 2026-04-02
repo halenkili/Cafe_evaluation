@@ -1,5 +1,6 @@
 // 语言切换功能
-function switchLanguage() {
+function switchLanguage(event) {
+  event.preventDefault();
   console.log('Switching language...');
   console.log('Current pathname:', window.location.pathname);
   
@@ -58,3 +59,6 @@ document.addEventListener('DOMContentLoaded', function() {
     console.error('Language button not found!');
   }
 });
+
+// 确保脚本加载完成
+console.log('lang.js loaded successfully');
